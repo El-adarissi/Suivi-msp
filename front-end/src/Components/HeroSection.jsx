@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, ShieldCheck, Activity, Database } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function HeroSection() {
   return (
@@ -146,23 +147,28 @@ export default function HeroSection() {
             "
             >
               {/* PRIMARY BUTTON */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="
-                px-8 py-4 rounded-2xl
-                bg-linear-to-r
-                from-yellow-500
-                to-amber-600
-                text-white font-semibold
-                shadow-xl shadow-yellow-500/30
-                flex items-center justify-center gap-3
-                transition-all duration-300
-              "
-              >
-                Commencer
-                <ArrowRight size={20} />
-              </motion.button>
+              <Link to="/signin">
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="
+                      px-8 py-4 rounded-2xl
+                      bg-linear-to-r
+                    from-yellow-500
+                    to-amber-600
+                    hover:from-yellow-400
+                    hover:to-amber-500
+                    text-white font-semibold
+                    shadow-xl shadow-yellow-500/30
+                    flex items-center justify-center gap-3
+                    transition-all duration-300
+                    "
+                >
+                    Commencer
+
+                    <ArrowRight size={20} />
+                </motion.button>
+                </Link>
 
               {/* SECONDARY BUTTON */}
               <motion.button
