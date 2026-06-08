@@ -1,93 +1,159 @@
-const User = require("../models/User");
+const Responsable_crmef = require("../models/Responsable_crmef");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client("583827417875-l3k605h5e08ipvoc5scq6ghugldbfgii.apps.googleusercontent.com");
+
 
 exports.register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, role } = req.body;
+    const { responsable_id, email, password } = req.body;
 
-    // 1. vérifier si user existe déjà
-    const userExists = await User.findOne({ email });
+    // Vérifier si le responsable existe déjà
+    const responsableExists = await Responsable_crmef.findOne({
+      $or: [
+        { email },
+        { responsable_id }
+      ]
+    });
 
-    if (userExists) {
+    if (responsableExists) {
       return res.status(400).json({
-        message: "User already exists",
+        success: false,
+        message: "Responsable already exists",
       });
     }
 
-    // 2. hash password
+    // Hasher le mot de passe
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 3. créer user dans MongoDB
-    const user = await User.create({
-      firstName,
-      lastName,
+    // Créer le responsable
+    const responsable = await Responsable_crmef.create({
+      responsable_id,
       email,
       password: hashedPassword,
-      role,
+      role: "admin",
     });
-
-    // 4. réponse
     res.status(201).json({
-      message: "User created successfully",
-      user,
+      success: true,
+      message: "Responsable created successfully",
+      responsable: {
+        _id: responsable._id,
+        responsable_id: responsable.responsable_id,
+        email: responsable.email,
+        role: responsable.role,
+      },
     });
 
   } catch (error) {
     res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.loginResponsable = async (req, res) => {
+  try {
+    const { email, password, role } = req.body;
+
+    // 🔴 check champs obligatoires
+    if (!email || !password || !role) {
+      return res.status(400).json({
+        success: false,
+        message: "Tous les champs sont obligatoires",
+      });
+    }
+
+    // 🔴 find user
+    const responsable = await Responsable_crmef.findOne({
+      email,
+    });
+
+    if (!responsable) {
+      return res.status(400).json({
+        success: false,
+        message: "Email incorrect",
+      });
+    }
+
+    // 🔴 check role
+    if (responsable.role !== role) {
+      return res.status(403).json({
+        success: false,
+        message: "Rôle non autorisé",
+      });
+    }
+
+    // 🔴 check password
+    const isMatch = await bcrypt.compare(
+      password,
+      responsable.password
+    );
+
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Mot de passe incorrect",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Connexion réussie",
+      responsable,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
       message: error.message,
     });
   }
 };
 
 
-exports.login = async (req, res) => {
+exports.googleLogin = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { token } = req.body;
 
-    // 1. chercher user dans MongoDB
-    const user = await User.findOne({ email });
+    // 🔴 verify google token
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    const { email, name } = payload;
+
+    // 🔴 check if user exists
+    let user = await Responsable.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({
-        message: "User not found",
+      user = await Responsable.create({
+        email,
+        firstName: name,
+        password: "", // google user no password
+        role: "admin",
       });
     }
 
-    // 2. vérifier password
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(400).json({
-        message: "Wrong password",
-      });
-    }
-
-    // 3. créer token JWT
-    const token = jwt.sign(
-      {
-        id: user._id,
-        role: user.role,
-      },
+    // 🔴 create JWT
+    const jwtToken = jwt.sign(
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "7d",
-      }
+      { expiresIn: "7d" }
     );
 
-    // 4. réponse
-    res.json({
-      message: "Login successful",
-      token,
-      user: {
-        id: user._id,
-        email: user.email,
-        role: user.role,
-      },
+    res.status(200).json({
+      success: true,
+      token: jwtToken,
+      user,
     });
 
   } catch (error) {
     res.status(500).json({
+      success: false,
       message: error.message,
     });
   }

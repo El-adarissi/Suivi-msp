@@ -1,0 +1,2 @@
+ID client   : 583827417875-l3k605h5e08ipvoc5scq6ghugldbfgii.apps.googleusercontent.com
+Code secret du client : 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
