@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Outlet, NavLink } from "react-router-dom"; // <-- Crucial Imports!
-
+import { useNavigate } from "react-router-dom";
 export default function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (darkMode) {
@@ -20,6 +21,11 @@ export default function DashboardLayout() {
     { id: "superviseurs", label: "Superviseur" },
     { id: "reclamations", label: "Réclamation" },
   ];
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/signin");
+  };
 
   return (
     <div className="flex h-screen bg-slate-50 dark:bg-slate-950 font-sans overflow-hidden transition-colors duration-200">
@@ -61,6 +67,15 @@ export default function DashboardLayout() {
               {item.label}
             </NavLink>
           ))}
+          {/* Logout — left side */}
+          
+          <button onClick={handleLogout}
+            className="px-4 py-2.5 bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M18 12H9m0 0l3-3m-3 3l3 3" />
+            </svg>
+            Déconnexion
+          </button>
         </nav>
       </aside>
 
@@ -87,10 +102,6 @@ export default function DashboardLayout() {
               className="p-2 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 focus:outline-none transition-colors"
             >
               {darkMode ? "☀️" : "🌙"}
-            </button>
-            <div className="h-8 w-px bg-slate-200 dark:bg-slate-800" />
-            <button className="flex text-sm bg-slate-100 rounded-full ring-2 ring-slate-200 dark:ring-slate-800">
-              <img className="h-8 w-8 rounded-full object-cover" src="https://i.pravatar.cc/100?img=33" alt="Avatar" />
             </button>
           </div>
         </header>
