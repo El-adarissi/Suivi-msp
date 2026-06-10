@@ -10,6 +10,10 @@ import { Stagiaires } from "./EspaceAdmin/Components/Stagiaires";
 import { Superviseurs } from "./EspaceAdmin/Components/Superviseurs";
 import { Reclamations } from "./EspaceAdmin/Components/Reclamations";
 import SignIn from "./pages/SignIn";
+import { EtablissementsSup } from "./EspaceSuperviseur/Components/EtablissementsSup";
+import { StagiairesSup } from "./EspaceSuperviseur/Components/Stagiaires";
+import { SuperviseursSup } from "./EspaceSuperviseur/Components/Superviseurs";
+import { ReclamationsSup } from "./EspaceSuperviseur/Components/Reclamations";
 
 function HomePage() {
   return (
@@ -32,11 +36,11 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/signin" element={<SignIn />} />
 
-        {/* Dashboard Parent Route Layout */}
+        {/* Dashboard Admin */}
         <Route path="/dashboard" element={<DashboardLayout />}>
           {/* Default view when opening /dashboard directly */}
           <Route index element={<Etablissements />} />
-          
+
           {/* Nested Sub-routes */}
           <Route path="etablissements" element={<Etablissements />} />
           <Route path="stagiaires" element={<Stagiaires />} />
@@ -45,7 +49,28 @@ export default function App() {
         </Route>
 
         {/* Fallback redirect for old URL case-sensitivity issues */}
-        <Route path="/DashboardLayout" element={<Navigate to="/dashboard" replace />} />
+        <Route
+          path="/DashboardLayout"
+          element={<Navigate to="/dashboard" replace />}
+        />
+
+        {/* Dashboard Parent Route Layout */}
+        <Route path="/dashboardsup" element={<DashboardLayout />}>
+          {/* Default view when opening /dashboard directly */}
+          <Route index element={<Etablissements />} />
+
+          {/* Nested Sub-routes */}
+          <Route path="etablissementssup" element={<EtablissementsSup />} />
+          <Route path="stagiairessup" element={<StagiairesSup />} />
+          <Route path="superviseurssup" element={<SuperviseursSup />} />
+          <Route path="reclamationssup" element={<ReclamationsSup />} />
+        </Route>
+
+        {/* Fallback redirect for old URL case-sensitivity issues */}
+        <Route
+          path="/DashboardLayoutSup"
+          element={<Navigate to="/dashboardsup" replace />}
+        />
       </Routes>
     </div>
   );
