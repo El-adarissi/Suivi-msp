@@ -19,7 +19,7 @@ export default function SignIn() {
       setError("Tous les champs sont obligatoires.");
       return;
     }
-
+    
     try {
       setLoading(true);
 
@@ -46,6 +46,16 @@ export default function SignIn() {
         case "etablissement":
           navigate("/dashboard/etablissement");
           break;
+          case "etablissementetab":
+            navigate("/dashboardetab/etablissementsetab");
+            break;
+          case "stagiairesetab":
+            navigate("/dashboardetab/stagiairesetab");
+            break;
+          case "stagiairestag":
+            navigate("/dashboardstag/stagiairestag");
+            break;
+          
         default:
           navigate("/");
       }
@@ -125,9 +135,9 @@ export default function SignIn() {
           >
             <option value="">Sélectionner votre rôle</option>
             <option value="responsable_crmef">Admin CRMEF</option>
-            <option value="stagiaire">Stagiaire</option>
+            <option value="stagiairestag">Stagiaire</option>
             <option value="superviseur">Superviseur</option>
-            <option value="etablissement">Admin Établissement</option>
+            <option value="etablissementetab">Admin Établissement</option>
           </select>
 
           {/* ERROR */}

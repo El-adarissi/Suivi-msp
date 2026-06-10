@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Outlet, NavLink } from "react-router-dom"; // <-- Crucial Imports!
 import { useNavigate } from "react-router-dom";
-export default function DashboardLayoutEtab() {
+export default function DashboardLayoutStag() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
@@ -16,8 +16,9 @@ export default function DashboardLayoutEtab() {
 
   // Items path matches exactly what we defined in App.jsx
   const navigationItems = [
-    { id: "etablissementsetab", label: "Établissements" },
-    { id: "stagiairesetab", label: "Stagiaires" },
+    { id: "rapports", label: "Rapports" },
+    { id: "etablissements", label: "Établissements" },
+    { id: "stagiairestag", label: "Stagiaires" },
     { id: "superviseurs", label: "Superviseur" },
     { id: "reclamations", label: "Réclamation" },
   ];
@@ -46,7 +47,7 @@ export default function DashboardLayoutEtab() {
       >
         <div className="flex items-center gap-3 h-16 border-b border-slate-200 dark:border-slate-800 px-6">
           <div className="h-7 w-7 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-black text-sm">M</div>
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">Espace Etablissement</h2>
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">Espace Stagiaire</h2>
         </div>
 
         {/* Dynamic NavLinks instead of buttons */}
@@ -54,7 +55,7 @@ export default function DashboardLayoutEtab() {
           {navigationItems.map((item) => (
             <NavLink
               key={item.id}
-              to={`/dashboardetab/${item.id}`}
+              to={`/dashboardstag/${item.id}`}
               onClick={() => setSidebarOpen(false)}
               className={({ isActive }) =>
                 `w-full flex items-center gap-3.5 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-150 ${
@@ -92,7 +93,7 @@ export default function DashboardLayoutEtab() {
               <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
             </button>
             <span className="text-xs uppercase tracking-widest font-bold px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
-              Espace Etablissement
+              Espace Stagiaire
             </span>
           </div>
 
@@ -108,7 +109,7 @@ export default function DashboardLayoutEtab() {
 
         {/* Dynamic Route Slot */}
         <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8 bg-slate-50 dark:bg-slate-950">
-          <Outlet /> 
+          <Outlet /> {/* <-- This is where sub-routes load and render dynamically */}
         </main>
       </div>
     </div>

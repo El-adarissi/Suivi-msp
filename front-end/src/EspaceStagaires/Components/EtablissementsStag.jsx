@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Pencil, Trash2 } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -130,7 +129,7 @@ function EtabForm({ form, setForm, onSubmit, onClose, loading, submitLabel }) {
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
-export function Etablissements() {
+export function EtablissementsStag() {
   
 
   const [data, setData]               = useState([]);
@@ -195,7 +194,7 @@ export function Etablissements() {
     try {
       const payload = { NomEtab: editForm.NomEtab, Ville: editForm.Ville, Location: editForm.Location, Email: editForm.Email };
       if (editForm.Password) payload.Password = editForm.Password;
-      await axios.put(`${API_URL}/api/updateetablissement/${showEdit.Id_Etablissement}`, payload, { headers: authHeaders() });
+      await axios.put(`${API_URL}/etablissements/${showEdit.Id_Etablissement}`, payload, { headers: authHeaders() });
       setShowEdit(null);
       fetchData();
       notify("Établissement mis à jour.");
@@ -284,11 +283,11 @@ export function Etablissements() {
                     <td className="px-6 py-4 text-right space-x-3">
                       <button onClick={() => openEdit(item)}
                         className="text-emerald-600 dark:text-emerald-400 hover:underline font-medium">
-                        <Pencil size={15} />
+                        Modifier
                       </button>
                       <button onClick={() => setShowDelete(item)}
                         className="text-rose-600 dark:text-rose-400 hover:underline font-medium">
-                         <Trash2 size={15} />
+                        Supprimer
                       </button>
                     </td>
                   </tr>
