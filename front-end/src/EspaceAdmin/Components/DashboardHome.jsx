@@ -23,6 +23,7 @@ export default function DashboardHome() {
       const res  = await fetch(`${import.meta.env.VITE_API_URL}/api/getstats`);
       const json = await res.json();
       if (json.success) setStats(json.data);
+      console.log(json.data);
     } catch (err) {
       console.error(err);
     }

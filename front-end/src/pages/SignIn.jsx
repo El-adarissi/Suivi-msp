@@ -35,13 +35,13 @@ export default function SignIn() {
 
       switch (user.role) {
         case "responsable_crmef":
-          navigate("/dashboard");
+          navigate("/dashboard/");
           break;
         case "superviseur":
-          navigate("/dashboard/superviseur");
+          navigate("/dashboardsup/profilesup");
           break;
         case "stagiaire":
-          navigate("/dashboard/stagiaire");
+          navigate("/dashboard/profilestag");
           break;
         case "etablissement":
           navigate("/dashboard/etablissement");
@@ -55,7 +55,6 @@ export default function SignIn() {
           case "stagiairestag":
             navigate("/dashboardstag/stagiairestag");
             break;
-          
         default:
           navigate("/");
       }

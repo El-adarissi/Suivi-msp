@@ -17,10 +17,10 @@ export default function DashboardLayout() {
   }, [darkMode]);
 
   const navigationItems = [
-    {id: "", label: "Aperçu"}, // <-- Default route when accessing /dashboard
+    {id: "/", label: "Aperçu"}, // <-- Default route when accessing /dashboard
     { id: "etablissements", label: "Établissements" },
     { id: "stagiaires", label: "Stagiaires" },
-    { id: "superviseurs", label: "Superviseur" },
+    { id: "superviseurs", label: "Superviseurs" },
     { id: "reclamations", label: "Réclamation" },
 
   ];
